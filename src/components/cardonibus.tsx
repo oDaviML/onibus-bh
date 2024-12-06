@@ -8,12 +8,12 @@ function click(linha: Linha) {
 export default function Cardonibus({ linha }: { linha: Linha }) {
 	return (
 		<Card
-			className="hover:scale-105 hover:shadow-lg hover:cursor-pointer transition-all"
+			className="hover:scale-105 hover:shadow-lg hover:cursor-pointer transition-all min-w-full sm:min-w-[300px]"
 			onClick={() => click(linha)}
 		>
 			<CardHeader>
-				<CardTitle>1502</CardTitle>
-				<CardDescription>Vista Alegre - Guarani</CardDescription>
+				<CardTitle>{linha.linha}</CardTitle>
+				<CardDescription>{linha.nome}</CardDescription>
 			</CardHeader>
 		</Card>
 	);

@@ -1,4 +1,4 @@
-import { Link, Outlet, createRootRoute } from "@tanstack/react-router";
+import { Outlet, createRootRoute } from "@tanstack/react-router";
 
 export const Route = createRootRoute({
 	component: () => (
@@ -6,11 +6,6 @@ export const Route = createRootRoute({
 			<nav className="bg-muted p-4 shadow-lg">
 				<div className="container mx-auto flex justify-between items-center">
 					<h1 className="text-xl font-extrabold">Onibus BH</h1>
-					<div className="flex gap-4">
-						<Link to="/" className="hover:text-blue-300 transition-colors [&.active]:font-bold">
-							Linhas
-						</Link>
-					</div>
 				</div>
 			</nav>
 
