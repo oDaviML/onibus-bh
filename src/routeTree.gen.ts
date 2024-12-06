@@ -12,12 +12,19 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as CoordenadasNumeroLinhaImport } from './routes/coordenadas.$numeroLinha'
 
 // Create/Update Routes
 
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CoordenadasNumeroLinhaRoute = CoordenadasNumeroLinhaImport.update({
+  id: '/coordenadas/$numeroLinha',
+  path: '/coordenadas/$numeroLinha',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -32,6 +39,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/coordenadas/$numeroLinha': {
+      id: '/coordenadas/$numeroLinha'
+      path: '/coordenadas/$numeroLinha'
+      fullPath: '/coordenadas/$numeroLinha'
+      preLoaderRoute: typeof CoordenadasNumeroLinhaImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -39,32 +53,37 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/coordenadas/$numeroLinha': typeof CoordenadasNumeroLinhaRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/coordenadas/$numeroLinha': typeof CoordenadasNumeroLinhaRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/coordenadas/$numeroLinha': typeof CoordenadasNumeroLinhaRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/coordenadas/$numeroLinha'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/coordenadas/$numeroLinha'
+  id: '__root__' | '/' | '/coordenadas/$numeroLinha'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CoordenadasNumeroLinhaRoute: typeof CoordenadasNumeroLinhaRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CoordenadasNumeroLinhaRoute: CoordenadasNumeroLinhaRoute,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +96,15 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/coordenadas/$numeroLinha"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/coordenadas/$numeroLinha": {
+      "filePath": "coordenadas.$numeroLinha.tsx"
     }
   }
 }

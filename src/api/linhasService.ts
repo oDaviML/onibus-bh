@@ -2,6 +2,7 @@ import type { ApiResponse } from "@/types/apiResponse";
 import type { Linha } from "@/types/linha";
 import type { AxiosPromise } from "axios";
 import apiClient from "./axiosConfig";
+import "../index.css";
 
 export const getAllLinhas = async (): AxiosPromise<ApiResponse<Linha[]>> => {
 	const response = await apiClient.get<ApiResponse<Linha[]>>("/linhas/");
