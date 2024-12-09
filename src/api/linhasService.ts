@@ -9,7 +9,7 @@ export const getAllLinhas = async (): AxiosPromise<ApiResponse<Linha[]>> => {
 	return response;
 };
 
-export const getLinhaByNumeroLinha = async (numeroLinha: number): AxiosPromise<ApiResponse<Linha[]>> => {
-	const response = await apiClient.get<ApiResponse<Linha[]>>(`/linhas/${numeroLinha}`);
+export const getLinhaByNumeroLinha = async (numeroLinha: number): AxiosPromise<ApiResponse<Linha>> => {
+	const response = await apiClient.get<ApiResponse<Linha>>(`/linhas/${numeroLinha}`);
 	return response;
 };

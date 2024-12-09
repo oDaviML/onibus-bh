@@ -1,8 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { MapContainer, Marker, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "../index.css";
+import { useLinhaByNumeroLinha } from "@/hooks/useLinha";
+import { useOnibusByLinha } from "@/hooks/useOnibus";
+import L from "leaflet";
 import { useEffect, useState } from "react";
+import iconeOnibusURL from "../assets/marcador_onibus.png";
 
 export const Route = createFileRoute("/coordenadas/$numeroLinha")({
 	component: RouteComponent,
@@ -17,10 +21,22 @@ const defaultLocation = {
 	longitude: -43.941204,
 };
 
+const iconeOnibus = L.icon({
+	iconUrl: iconeOnibusURL,
+	iconSize: [32, 32],
+	iconAnchor: [16, 32],
+	popupAnchor: [0, -32],
+});
+
 function RouteComponent() {
 	const { numeroLinha } = Route.useParams();
+	const numeroLinhaNumber = Number.parseInt(numeroLinha, 10);
+
 	const [location, setLocation] = useState(defaultLocation);
 	const [isLoading, setIsLoading] = useState(true);
+
+	const { onibus, isError } = useOnibusByLinha(numeroLinhaNumber);
+	const { linha } = useLinhaByNumeroLinha(numeroLinhaNumber);
 
 	useEffect(() => {
 		if (navigator.geolocation) {
@@ -45,9 +61,27 @@ function RouteComponent() {
 		<div className="p-2 shadow-md rounded-md flex flex-col items-center">
 			<header className="flex flex-col items-center gap-2 my-4">
 				<h1 className="text-3xl font-extrabold">Onibus BH</h1>
+				<h1 className="text-xl font-bold">{linha?.data.linha}</h1>
 				<h3 className="text-sm text-center font-light">Ultima atualizacao: {new Date().toLocaleString()}</h3>
 			</header>
-			{isLoading ? (
+			{isError && (
+				<section className="bg-white dark:bg-gray-900">
+					<div className="py-4 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+						<div className="mx-auto max-w-screen-sm text-center">
+							<h1 className="mb-4 text-7xl tracking-tight font-extrabold lg:text-9xl text-primary-600 dark:text-primary-500">
+								500
+							</h1>
+							<p className="mb-4 text-3xl tracking-tight font-bold text-gray-900 md:text-4xl dark:text-white">
+								Falha ao carregar as coordenadas.
+							</p>
+							<p className="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">
+								Ocorreu um erro ao carregar as coordenadas, por favor tente novamente.
+							</p>
+						</div>
+					</div>
+				</section>
+			)}
+			{isLoading && (
 				<section>
 					<svg
 						aria-hidden="true"
@@ -67,13 +101,42 @@ function RouteComponent() {
 					</svg>
 					<span className="sr-only">Loading...</span>
 				</section>
-			) : (
+			)}
+			{!isError && !isLoading && (
 				<MapContainer center={[location.latitude, location.longitude]} zoom={16}>
 					<TileLayer
 						attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 						url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 					/>
 					<Marker position={[location.latitude, location.longitude]} />
+					{onibus?.data.map((onibus) => {
+						if (onibus.sentido != null || Number(onibus.sentido) !== 3) {
+							console.log(onibus);
+
+							return (
+								<Marker
+									key={onibus.numeroVeiculo}
+									position={[onibus.latitude, onibus.longitude]}
+									icon={iconeOnibus}
+								>
+									<Popup className="p-4">
+										<div className="flex flex-col">
+											<h3 className="font-bold text-lg text-gray-800 mb-2">{onibus.numeroVeiculo}</h3>
+											<div className="text-gray-700">
+												<p className="mb-1">
+													<span className="font-medium">Velocidade:</span> {onibus.velocidade} km/h
+												</p>
+												<p>
+													<span className="font-medium">Sentido:</span>{" "}
+													{Number(onibus.sentido) === 1 ? "Ida" : "Volta"}
+												</p>
+											</div>
+										</div>
+									</Popup>
+								</Marker>
+							);
+						}
+					})}
 				</MapContainer>
 			)}
 		</div>

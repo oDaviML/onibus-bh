@@ -12,11 +12,6 @@ function RouteComponent() {
 
 	return (
 		<div className="p-5 shadow-md rounded-md flex flex-col items-center">
-			<header className="flex flex-col items-center gap-2 my-4">
-				<h1 className="text-3xl font-extrabold">Onibus BH</h1>
-				<h3 className="text-sm text-center font-light">Ultima atualizacao: {new Date().toLocaleString()}</h3>
-			</header>
-
 			<Input type="text" placeholder="Procurar linha" className="max-w-md" />
 			<section className="flex gap-4 flex-wrap my-4 justify-center">
 				{!isLoading &&
@@ -58,7 +53,7 @@ function RouteComponent() {
 									Falha ao carregar linhas.
 								</p>
 								<p className="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">
-									Ocorreu um erro ao carregar as linhas, por favor tente novamente.{" "}
+									Ocorreu um erro ao carregar as linhas, por favor tente novamente.
 								</p>
 							</div>
 						</div>

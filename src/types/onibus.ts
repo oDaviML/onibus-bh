@@ -1,7 +1,7 @@
 export type Onibus = {
 	numeroVeiculo: number;
 	latitude: number;
-	longitue: number;
+	longitude: number;
 	velocidade: number;
 	sentido: number;
 };

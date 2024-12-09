@@ -4,14 +4,11 @@ import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
 
 export default function Cardonibus({ linha }: { linha: Linha }) {
 	return (
-		<Link
-			to={`/coordenadas/${linha.numeroLinha}`}
-			className="hover:scale-105 hover:shadow-lg hover:cursor-pointer transition-all min-w-full sm:min-w-[300px]"
-		>
+		<Link to={`/coordenadas/${linha.numeroLinha}`}>
 			<Card className="hover:scale-105 hover:shadow-lg hover:cursor-pointer transition-all min-w-full sm:min-w-[300px]">
 				<CardHeader>
 					<CardTitle>{linha.linha}</CardTitle>
-					<CardDescription>{linha.nome}</CardDescription>
+					<CardDescription className="font-light">{linha.nome}</CardDescription>
 				</CardHeader>
 			</Card>
 		</Link>
