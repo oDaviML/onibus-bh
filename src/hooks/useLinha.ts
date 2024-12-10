@@ -1,10 +1,10 @@
 import { getAllLinhas, getLinhaByNumeroLinha } from "@/api/linhasService";
 import { useQuery } from "@tanstack/react-query";
 
-export const useLinha = () => {
+export const useLinha = (filtarLinhas: boolean) => {
 	const query = useQuery({
 		queryKey: ["listaLinhas"],
-		queryFn: getAllLinhas,
+		queryFn: () => getAllLinhas(filtarLinhas),
 	});
 
 	return {

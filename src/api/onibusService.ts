@@ -8,7 +8,7 @@ export const getAllOnibus = async (): AxiosPromise<ApiResponse<Onibus[]>> => {
 	return response;
 };
 
-export const getOnibusByLinha = async (numeroLinha: number): AxiosPromise<ApiResponse<Onibus[]>> => {
-	const response = await apiClient.get<ApiResponse<Onibus[]>>(`/onibus/linha/${numeroLinha}`);
+export const getOnibusByLinha = async (numeroLinha: number, sentido: number): AxiosPromise<ApiResponse<Onibus[]>> => {
+	const response = await apiClient.get<ApiResponse<Onibus[]>>(`/onibus/linha/${numeroLinha}/${sentido}`);
 	return response;
 };

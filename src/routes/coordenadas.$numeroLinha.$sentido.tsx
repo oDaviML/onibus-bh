@@ -8,11 +8,12 @@ import L from "leaflet";
 import { useEffect, useState } from "react";
 import iconeOnibusURL from "../assets/marcador_onibus.png";
 
-export const Route = createFileRoute("/coordenadas/$numeroLinha")({
+export const Route = createFileRoute("/coordenadas/$numeroLinha/$sentido")({
 	component: RouteComponent,
 	loader: async ({ params }) => {
-		const { numeroLinha } = params;
-		return { numeroLinha };
+		const numeroLinha = params.numeroLinha;
+		const sentido = params.sentido;
+		return { numeroLinha, sentido };
 	},
 });
 
@@ -29,13 +30,14 @@ const iconeOnibus = L.icon({
 });
 
 function RouteComponent() {
-	const { numeroLinha } = Route.useParams();
+	const { numeroLinha, sentido } = Route.useParams();
 	const numeroLinhaNumber = Number.parseInt(numeroLinha, 10);
+	const sentidoNumber = Number.parseInt(sentido, 10);
 
 	const [location, setLocation] = useState(defaultLocation);
 	const [isLoading, setIsLoading] = useState(true);
 
-	const { onibus, isError } = useOnibusByLinha(numeroLinhaNumber);
+	const { onibus, isError } = useOnibusByLinha(numeroLinhaNumber, sentidoNumber);
 	const { linha } = useLinhaByNumeroLinha(numeroLinhaNumber);
 
 	useEffect(() => {
@@ -62,6 +64,7 @@ function RouteComponent() {
 			<header className="flex flex-col items-center gap-2 my-4">
 				<h1 className="text-3xl font-extrabold">Onibus BH</h1>
 				<h1 className="text-xl font-bold">{linha?.data.linha}</h1>
+				<h2 className="text-lg font-light">{sentidoNumber === 1 ? "Ida" : "Volta"}</h2>
 				<h3 className="text-sm text-center font-light">Ultima atualizacao: {new Date().toLocaleString()}</h3>
 			</header>
 			{isError && (
@@ -111,8 +114,6 @@ function RouteComponent() {
 					<Marker position={[location.latitude, location.longitude]} />
 					{onibus?.data.map((onibus) => {
 						if (onibus.sentido != null || Number(onibus.sentido) !== 3) {
-							console.log(onibus);
-
 							return (
 								<Marker
 									key={onibus.numeroVeiculo}

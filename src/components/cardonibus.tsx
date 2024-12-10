@@ -23,17 +23,17 @@ export default function Cardonibus({ linha }: { linha: Linha }) {
 				</DialogHeader>
 
 				<div className="flex gap-4 flex-wrap justify-center">
-					<Link to={`/coordenadas/${linha.numeroLinha}`}>
+					<Link to={`/coordenadas/${linha.numeroLinha}/1`}>
 						<Card className="hover:scale-105 hover:shadow-lg hover:cursor-pointer transition-all w-[200px] h-[200px] flex items-center justify-center">
 							<CardHeader>
-								<CardTitle>Origem</CardTitle>
+								<CardTitle>Ida</CardTitle>
 							</CardHeader>
 						</Card>
 					</Link>
-					<Link to={`/coordenadas/${linha.numeroLinha}`}>
+					<Link to={`/coordenadas/${linha.numeroLinha}/2`}>
 						<Card className="hover:scale-105 hover:shadow-lg hover:cursor-pointer transition-all w-[200px] h-[200px] flex items-center justify-center">
 							<CardHeader>
-								<CardTitle>Destino</CardTitle>
+								<CardTitle>Volta</CardTitle>
 							</CardHeader>
 						</Card>
 					</Link>

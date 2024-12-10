@@ -10,19 +10,38 @@ export const Route = createFileRoute("/")({
 });
 
 function RouteComponent() {
-	const { linhas, isLoading, isError } = useLinha();
+	const [filtarLinhas, setFiltrarLinhas] = useState<boolean>(true);
+
+	const { linhas, isLoading, isError } = useLinha(filtarLinhas);
 	const [linhasFiltradas, setLinhasFiltradas] = useState<Linha[]>([]);
 
 	const handleFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const nomeLinha = event.target.value;
 		const filtrados: Linha[] = linhas?.data?.filter((l) => l.linha.includes(nomeLinha)) || [];
 
-		nomeLinha === null ? setLinhasFiltradas([]) : setLinhasFiltradas(filtrados);
+		setLinhasFiltradas(nomeLinha ? filtrados : []);
 	};
 
 	return (
 		<div className="p-5 shadow-md rounded-md flex flex-col items-center">
-			<Input type="text" placeholder="Procurar linha" className="max-w-md" onChange={(e) => handleFilter(e)} />
+			<div className="flex gap-4 items-center">
+				<Input type="text" placeholder="Procurar linha" className="max-w-md" onChange={(e) => handleFilter(e)} />
+				{/*
+				<div className="flex items-center gap-2">
+					<Label htmlFor="filtarLinhas" className="text-sm">
+						Filtrar linhas
+					</Label>
+					
+					TODO: Ajustar switch para filtro de linhas
+					<Switch
+						id="filtarLinhas"
+						checked={filtarLinhas}
+						onCheckedChange={(checked) => setFiltrarLinhas(checked)}
+					/> 
+				</div>
+				*/}
+			</div>
+
 			<section className="flex gap-4 flex-wrap my-4 justify-center">
 				{!isLoading &&
 					linhasFiltradas.length === 0 &&
@@ -42,6 +61,7 @@ function RouteComponent() {
 					))}
 				{isLoading && (
 					<section>
+						{/* Spinner de carregamento */}
 						<svg
 							aria-hidden="true"
 							className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"

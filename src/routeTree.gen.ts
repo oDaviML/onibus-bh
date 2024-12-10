@@ -12,7 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
-import { Route as CoordenadasNumeroLinhaImport } from './routes/coordenadas.$numeroLinha'
+import { Route as CoordenadasNumeroLinhaSentidoImport } from './routes/coordenadas.$numeroLinha.$sentido'
 
 // Create/Update Routes
 
@@ -22,11 +22,12 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const CoordenadasNumeroLinhaRoute = CoordenadasNumeroLinhaImport.update({
-  id: '/coordenadas/$numeroLinha',
-  path: '/coordenadas/$numeroLinha',
-  getParentRoute: () => rootRoute,
-} as any)
+const CoordenadasNumeroLinhaSentidoRoute =
+  CoordenadasNumeroLinhaSentidoImport.update({
+    id: '/coordenadas/$numeroLinha/$sentido',
+    path: '/coordenadas/$numeroLinha/$sentido',
+    getParentRoute: () => rootRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -39,11 +40,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/coordenadas/$numeroLinha': {
-      id: '/coordenadas/$numeroLinha'
-      path: '/coordenadas/$numeroLinha'
-      fullPath: '/coordenadas/$numeroLinha'
-      preLoaderRoute: typeof CoordenadasNumeroLinhaImport
+    '/coordenadas/$numeroLinha/$sentido': {
+      id: '/coordenadas/$numeroLinha/$sentido'
+      path: '/coordenadas/$numeroLinha/$sentido'
+      fullPath: '/coordenadas/$numeroLinha/$sentido'
+      preLoaderRoute: typeof CoordenadasNumeroLinhaSentidoImport
       parentRoute: typeof rootRoute
     }
   }
@@ -53,37 +54,37 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/coordenadas/$numeroLinha': typeof CoordenadasNumeroLinhaRoute
+  '/coordenadas/$numeroLinha/$sentido': typeof CoordenadasNumeroLinhaSentidoRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/coordenadas/$numeroLinha': typeof CoordenadasNumeroLinhaRoute
+  '/coordenadas/$numeroLinha/$sentido': typeof CoordenadasNumeroLinhaSentidoRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/coordenadas/$numeroLinha': typeof CoordenadasNumeroLinhaRoute
+  '/coordenadas/$numeroLinha/$sentido': typeof CoordenadasNumeroLinhaSentidoRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/coordenadas/$numeroLinha'
+  fullPaths: '/' | '/coordenadas/$numeroLinha/$sentido'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/coordenadas/$numeroLinha'
-  id: '__root__' | '/' | '/coordenadas/$numeroLinha'
+  to: '/' | '/coordenadas/$numeroLinha/$sentido'
+  id: '__root__' | '/' | '/coordenadas/$numeroLinha/$sentido'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  CoordenadasNumeroLinhaRoute: typeof CoordenadasNumeroLinhaRoute
+  CoordenadasNumeroLinhaSentidoRoute: typeof CoordenadasNumeroLinhaSentidoRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  CoordenadasNumeroLinhaRoute: CoordenadasNumeroLinhaRoute,
+  CoordenadasNumeroLinhaSentidoRoute: CoordenadasNumeroLinhaSentidoRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,14 +98,14 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/coordenadas/$numeroLinha"
+        "/coordenadas/$numeroLinha/$sentido"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/coordenadas/$numeroLinha": {
-      "filePath": "coordenadas.$numeroLinha.tsx"
+    "/coordenadas/$numeroLinha/$sentido": {
+      "filePath": "coordenadas.$numeroLinha.$sentido.tsx"
     }
   }
 }

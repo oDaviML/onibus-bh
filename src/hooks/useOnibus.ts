@@ -13,10 +13,10 @@ export const useOnibus = () => {
 	};
 };
 
-export const useOnibusByLinha = (numeroLinha: number) => {
+export const useOnibusByLinha = (numeroLinha: number, sentido: number) => {
 	const query = useQuery({
 		queryKey: ["listaOnibusLinha", numeroLinha],
-		queryFn: () => getOnibusByLinha(numeroLinha),
+		queryFn: () => getOnibusByLinha(numeroLinha, sentido),
 		enabled: !!numeroLinha,
 		refetchInterval: 20000,
 	});

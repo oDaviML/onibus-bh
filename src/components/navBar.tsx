@@ -11,7 +11,7 @@ export default function NavBar() {
 							<img alt="Onibus" src={onibusImage} className="h-10 w-auto" />
 							<span className="text-white font text-2xl font-bold ml-2">Onibus BH</span>
 						</div>
-						<div className="hidden sm:ml-6 sm:block">
+						<div className="ml-6">
 							<div className="flex space-x-6">
 								<Link
 									to="/"
