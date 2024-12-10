@@ -1,7 +1,9 @@
 import Cardonibus from "@/components/cardonibus";
 import { Input } from "@/components/ui/input";
 import { useLinha } from "@/hooks/useLinha";
+import type { Linha } from "@/types/linha";
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 
 export const Route = createFileRoute("/")({
 	component: RouteComponent,
@@ -9,13 +11,30 @@ export const Route = createFileRoute("/")({
 
 function RouteComponent() {
 	const { linhas, isLoading, isError } = useLinha();
+	const [linhasFiltradas, setLinhasFiltradas] = useState<Linha[]>([]);
+
+	const handleFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const nomeLinha = event.target.value;
+		const filtrados: Linha[] = linhas?.data?.filter((l) => l.linha.includes(nomeLinha)) || [];
+
+		nomeLinha === null ? setLinhasFiltradas([]) : setLinhasFiltradas(filtrados);
+	};
 
 	return (
 		<div className="p-5 shadow-md rounded-md flex flex-col items-center">
-			<Input type="text" placeholder="Procurar linha" className="max-w-md" />
+			<Input type="text" placeholder="Procurar linha" className="max-w-md" onChange={(e) => handleFilter(e)} />
 			<section className="flex gap-4 flex-wrap my-4 justify-center">
 				{!isLoading &&
+					linhasFiltradas.length === 0 &&
 					linhas?.data.map((linha) => (
+						<Cardonibus
+							linha={{ numeroLinha: linha.numeroLinha, nome: linha.nome, linha: linha.linha }}
+							key={linha.numeroLinha}
+						/>
+					))}
+				{!isLoading &&
+					linhasFiltradas.length !== 0 &&
+					linhasFiltradas.map((linha) => (
 						<Cardonibus
 							linha={{ numeroLinha: linha.numeroLinha, nome: linha.nome, linha: linha.linha }}
 							key={linha.numeroLinha}
