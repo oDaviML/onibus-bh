@@ -5,6 +5,7 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
 	plugins: [react(), TanStackRouterVite()],
+	base: "/onibus-bh",
 	resolve: {
 		alias: {
 			"@": path.resolve(__dirname, "./src"),
