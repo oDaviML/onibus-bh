@@ -10,7 +10,7 @@ export const Route = createFileRoute("/")({
 });
 
 function RouteComponent() {
-	const [filtarLinhas, setFiltrarLinhas] = useState<boolean>(true);
+	const [filtarLinhas] = useState<boolean>(true);
 
 	const { linhas, isLoading, isError } = useLinha(filtarLinhas);
 	const [linhasFiltradas, setLinhasFiltradas] = useState<Linha[]>([]);
