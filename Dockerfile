@@ -1,28 +1,22 @@
-# Etapa 1: Build do Frontend
 FROM node:20-alpine as builder
 
 # Definir o diretório de trabalho dentro do container
 WORKDIR /app
 
-# Copiar os arquivos do projeto para o container
+# Copiar os arquivos do projeto
 COPY . .
 
-# Passar argumentos e configurá-los como variáveis de ambiente
+# Adicionar argumentos e variáveis de ambiente
 ARG VITE_APP_BACKEND_ADDRESS
-ENV VITE_APP_BACKEND_ADDRESS=$VITE_APP_BACKEND_ADDRESS
+ENV VITE_APP_BACKEND_ADDRESS $VITE_APP_BACKEND_ADDRESS
 
-# Instalar dependências e gerar os arquivos de build
+# Instalar dependências e criar a build de produção
 RUN npm install
 RUN npm run build
 
-# Etapa 2: Exportar os arquivos de build para o sistema host
-FROM alpine:latest
+# Etapa 2: Preparar os arquivos de build
+FROM alpine:3.18
+WORKDIR /app
 
-# Criar um diretório de trabalho para exportar os arquivos
-WORKDIR /output
-
-# Copiar os arquivos de build da etapa anterior
-COPY --from=builder /app/dist ./
-
-# Instrução para fins de debug (opcional)
-CMD ["ls", "-la"]
+# Copiar apenas os arquivos estáticos gerados
+COPY --from=builder /app/dist /app
