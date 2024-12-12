@@ -2,11 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "../index.css";
+import iconeOnibusURL from "@/assets/onibus-icone.png";
+import userLocationURL from "@/assets/user-location.png";
 import { useLinhaByNumeroLinha } from "@/hooks/useLinha";
 import { useOnibusByLinha } from "@/hooks/useOnibus";
 import L from "leaflet";
 import { useEffect, useState } from "react";
-import iconeOnibusURL from "../assets/marcador_onibus.png";
 
 export const Route = createFileRoute("/coordenadas/$numeroLinha/$sentido")({
 	component: RouteComponent,
@@ -24,6 +25,13 @@ const defaultLocation = {
 
 const iconeOnibus = L.icon({
 	iconUrl: iconeOnibusURL,
+	iconSize: [32, 32],
+	iconAnchor: [16, 32],
+	popupAnchor: [0, -32],
+});
+
+const locationIcon = L.icon({
+	iconUrl: userLocationURL,
 	iconSize: [32, 32],
 	iconAnchor: [16, 32],
 	popupAnchor: [0, -32],
@@ -62,7 +70,6 @@ function RouteComponent() {
 	return (
 		<div className="p-2 shadow-md rounded-md flex flex-col items-center">
 			<header className="flex flex-col items-center gap-2 my-4">
-				<h1 className="text-3xl font-extrabold">Onibus BH</h1>
 				<h1 className="text-xl font-bold">{linha?.data.linha}</h1>
 				<h2 className="text-lg font-light">{sentidoNumber === 1 ? "Ida" : "Volta"}</h2>
 				<h3 className="text-sm text-center font-light">Ultima atualizacao: {new Date().toLocaleString()}</h3>
@@ -111,7 +118,7 @@ function RouteComponent() {
 						attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 						url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 					/>
-					<Marker position={[location.latitude, location.longitude]} />
+					<Marker position={[location.latitude, location.longitude]} icon={locationIcon} />
 					{onibus?.data.map((onibus) => {
 						if (onibus.sentido != null || Number(onibus.sentido) !== 3) {
 							return (

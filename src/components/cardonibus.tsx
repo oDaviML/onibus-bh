@@ -9,7 +9,7 @@ export default function Cardonibus({ linha }: { linha: Linha }) {
 			<DialogTrigger asChild>
 				<Card className="hover:scale-105 hover:shadow-lg hover:cursor-pointer transition-all min-w-full sm:min-w-[300px]">
 					<CardHeader>
-						<CardTitle>{linha.linha}</CardTitle>
+						<CardTitle className="text-lg sm:text-2xl">{linha.linha}</CardTitle>
 						<CardDescription className="font-light">{linha.nome}</CardDescription>
 					</CardHeader>
 				</Card>

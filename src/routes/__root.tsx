@@ -6,7 +6,7 @@ export const Route = createRootRoute({
 		<main className="min-h-screen bg-background flex flex-col">
 			<NavBar />
 
-			<section className="flex-grow p-12">
+			<section className="flex-grow p-6">
 				<Outlet />
 			</section>
 		</main>
