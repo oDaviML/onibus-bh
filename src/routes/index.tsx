@@ -23,11 +23,11 @@ function RouteComponent() {
 	};
 
 	return (
-		<section className="flex flex-col gap-4">
-			<header className="p-5 shadow-lg rounded-md flex flex-col items-center">
+		<section className="flex flex-col gap-4 items-center">
+			<header className="p-5 shadow-lg rounded-lg flex flex-col items-center max-w-lg">
 				<Input type="text" placeholder="Procurar linha" className="max-w-md" onChange={(e) => handleFilter(e)} />
 			</header>
-			<div className="p-5 shadow-md rounded-md flex flex-col items-center">
+			<div className="p-5 shadow-md rounded-md flex flex-col items-center w-full">
 				<section className="grid grid-cols-2 md:flex gap-4 flex-wrap my-4 justify-center">
 					{!isLoading &&
 						linhasFiltradas.length === 0 &&
@@ -46,7 +46,7 @@ function RouteComponent() {
 							/>
 						))}
 					{isLoading && (
-						<section>
+						<section className="col-span-2">
 							{/* Spinner de carregamento */}
 							<svg
 								aria-hidden="true"

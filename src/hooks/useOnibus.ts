@@ -18,7 +18,7 @@ export const useOnibusByLinha = (numeroLinha: number, sentido: number) => {
 		queryKey: ["listaOnibusLinha", numeroLinha],
 		queryFn: () => getOnibusByLinha(numeroLinha, sentido),
 		enabled: !!numeroLinha,
-		refetchInterval: 20000,
+		refetchInterval: 10000,
 	});
 
 	return {
