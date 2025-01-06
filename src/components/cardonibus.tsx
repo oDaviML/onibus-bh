@@ -4,6 +4,11 @@ import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 
 export default function Cardonibus({ linha }: { linha: Linha }) {
+	const allowedPaths = {
+		ida: `/${linha.numeroLinha}/1`,
+		volta: `/${linha.numeroLinha}/2`,
+	};
+
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
@@ -23,14 +28,14 @@ export default function Cardonibus({ linha }: { linha: Linha }) {
 				</DialogHeader>
 
 				<div className="flex gap-4 flex-wrap justify-center">
-					<Link to={`/coordenadas/${linha.numeroLinha}/1`}>
+					<Link to={allowedPaths.ida}>
 						<Card className="hover:scale-105 hover:shadow-lg hover:cursor-pointer transition-all w-[200px] h-[200px] flex items-center justify-center">
 							<CardHeader>
 								<CardTitle>Ida</CardTitle>
 							</CardHeader>
 						</Card>
 					</Link>
-					<Link to={`/coordenadas/${linha.numeroLinha}/2`}>
+					<Link to={allowedPaths.volta}>
 						<Card className="hover:scale-105 hover:shadow-lg hover:cursor-pointer transition-all w-[200px] h-[200px] flex items-center justify-center">
 							<CardHeader>
 								<CardTitle>Volta</CardTitle>
