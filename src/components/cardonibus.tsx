@@ -1,9 +1,14 @@
 import type { Linha } from "@/types/linha";
 import { Link } from "@tanstack/react-router";
+import { Heart } from "lucide-react";
 import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 
-export default function Cardonibus({ linha }: { linha: Linha }) {
+export default function Cardonibus({
+	linha,
+	isFavorite,
+	toggleFavorite,
+}: { linha: Linha; isFavorite: boolean; toggleFavorite: () => void }) {
 	const allowedPaths = {
 		ida: `/${linha.numeroLinha}/1`,
 		volta: `/${linha.numeroLinha}/2`,
@@ -21,7 +26,17 @@ export default function Cardonibus({ linha }: { linha: Linha }) {
 			</DialogTrigger>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>{linha.linha}</DialogTitle>
+					<DialogTitle className="flex items-center gap-2">
+						{linha.linha}
+						{isFavorite ? (
+							<Heart onClick={toggleFavorite} className="text-red-500 fill-red-500" />
+						) : (
+							<Heart
+								onClick={toggleFavorite}
+								className="hover:fill-red-500 hover:text-red-500 transition-colors"
+							/>
+						)}
+					</DialogTitle>
 					<DialogDescription>
 						Escolha entre as opções para definir o ponto de partida ou o destino.
 					</DialogDescription>
