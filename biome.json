@@ -6,7 +6,14 @@
 		"useIgnoreFile": false
 	},
 	"files": {
-		"ignore": ["**/node_modules/**", "**/dist/**", "**/build/**"]
+		"ignore": [
+			"**/node_modules/**",
+			"**/dist/**",
+			"**/build/**",
+			"./src/routeTree.gen.ts",
+			"./src/hooks/use-toast.ts",
+			"./src/components/ui/**"
+		]
 	},
 	"formatter": {
 		"enabled": true,

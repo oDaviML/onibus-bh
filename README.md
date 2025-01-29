@@ -1,50 +1,67 @@
-# React + TypeScript + Vite
+# 🚍 Ônibus BH
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A **Ônibus BH** é uma aplicação que fornece informações em tempo real sobre o transporte público de Belo Horizonte.
 
-Currently, two official plugins are available:
+## ✨ Funcionalidades
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 📊 **Localização em tempo real**: Obtenha as coordenadas dos ônibus, atualizadas a cada 20 segundos.
+- 🔍 **Consulta de linhas**: Pesquise e visualize informações detalhadas sobre as linhas de ônibus.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## 🛠 Tecnologias Utilizadas
 
-- Configure the top-level `parserOptions` property like this:
+- **Frontend**: React com Vite
+- **Roteamento**: TanStack Router
+- **Gerenciamento de estado e requisições**: TanStack Query e Axios
+- **Mapas interativos**: React Leaflet
+- **Estilização**: Tailwind CSS e Shadcn UI
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+---
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## 🚀 Instalação Local
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+1. Clone o repositório:
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+   ```bash
+   git clone https://github.com/oDaviML/onibus-bh.git
+   cd onibus-bh
+   ```
+
+2. Inicie a aplicação utilizando Docker:
+
+   ```bash
+   docker compose up -d --build
+   ```
+
+   Ou, caso prefira rodar localmente sem Docker:
+
+   ```bash
+   npm install
+   npm run dev
+   ```
+
+3. Acesse a aplicação pelo navegador:
+
+   - [http://localhost:3000/](http://localhost:3000/)
+
+---
+
+## 🌐 Acesso Online
+
+Acesse a versão hospedada na Netlify:
+
+- [Ônibus BH Online](https://onibusbh.netlify.app/)
+
+---
+
+## 💻 API
+
+A aplicação consome dados de uma API própria. O código-fonte e mais detalhes podem ser encontrados no repositório abaixo:
+
+- [Repositório da API](https://github.com/oDaviML/api-onibusbh)
+
+---
+
+Desenvolvido com ❤️ por [DaviML](https://github.com/oDaviML).
+
