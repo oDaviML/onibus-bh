@@ -33,8 +33,10 @@ function RouteComponent() {
 	return (
 		<div className="p-2 shadow-md rounded-md flex flex-col items-center border-dashed border-2 border-gray-600">
 			<header className="flex flex-col items-center gap-2 my-4">
-				<h1 className="text-xl font-bold">{linha?.data.linha}</h1>
-				<h2 className="text-lg font-light">{sentidoNumber === 1 ? "Ida" : "Volta"}</h2>
+				<h1 className="text-xl font-bold text-center">
+					{linha?.data.linha} -{" "}
+					<span className="text-lg font-light">{sentidoNumber === 1 ? "Ida/Unidirecional" : "Volta"}</span>
+				</h1>
 				<h3 className="text-sm text-center font-light">Ultima atualizacao: {new Date().toLocaleString()}</h3>
 			</header>
 			{isError && <ServerError />}
