@@ -1,6 +1,6 @@
-import ServerError from "@/components/ServerError";
 import NavBar from "@/components/navBar";
 import NotFound from "@/components/notFound";
+import ServerError from "@/components/serverError";
 import { Toaster } from "@/components/ui/toaster";
 import { Outlet, createRootRoute } from "@tanstack/react-router";
 

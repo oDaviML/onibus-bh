@@ -2,7 +2,7 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "@/index.css";
 
-import ServerError from "@/components/ServerError";
+import ServerError from "@/components/serverError";
 import Spinner from "@/components/spinner";
 import { useLinhaByNumeroLinha } from "@/hooks/useLinha";
 import useLocation from "@/hooks/useLocation";

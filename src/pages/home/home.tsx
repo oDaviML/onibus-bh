@@ -1,5 +1,5 @@
-import ServerError from "@/components/ServerError";
 import Cardonibus from "@/components/cardonibus";
+import ServerError from "@/components/serverError";
 import Spinner from "@/components/spinner";
 import { Input } from "@/components/ui/input";
 import { useLinha } from "@/hooks/useLinha";
