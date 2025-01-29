@@ -1,4 +1,6 @@
+import ServerError from "@/components/ServerError";
 import NavBar from "@/components/navBar";
+import NotFound from "@/components/notFound";
 import { Toaster } from "@/components/ui/toaster";
 import { Outlet, createRootRoute } from "@tanstack/react-router";
 
@@ -12,4 +14,6 @@ export const Route = createRootRoute({
 			<Toaster />
 		</main>
 	),
+	errorComponent: ServerError,
+	notFoundComponent: NotFound,
 });

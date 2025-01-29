@@ -1,3 +1,4 @@
+import ServerError from "@/components/ServerError";
 import Cardonibus from "@/components/cardonibus";
 import Spinner from "@/components/spinner";
 import { Input } from "@/components/ui/input";
@@ -70,23 +71,7 @@ function RouteComponent() {
 							/>
 						))}
 					{isLoading && <Spinner className="col-span-2" />}
-					{isError && (
-						<section className="bg-white dark:bg-gray-900 col-span-2">
-							<div className="py-4 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
-								<div className="mx-auto max-w-screen-sm text-center">
-									<h1 className="mb-4 text-7xl tracking-tight font-extrabold lg:text-9xl text-primary-600 dark:text-primary-500">
-										500
-									</h1>
-									<p className="mb-4 text-3xl tracking-tight font-bold text-gray-900 md:text-4xl dark:text-white">
-										Falha ao carregar linhas.
-									</p>
-									<p className="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">
-										Ocorreu um erro ao carregar as linhas, por favor tente novamente.
-									</p>
-								</div>
-							</div>
-						</section>
-					)}
+					{isError && <ServerError />}
 				</section>
 			</div>
 		</section>
