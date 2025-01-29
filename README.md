@@ -63,5 +63,5 @@ A aplicação consome dados de uma API própria. O código-fonte e mais detalhes
 
 ---
 
-Desenvolvido com ❤️ por [DaviML](https://github.com/oDaviML).
+Desenvolvido com ❤️ por [Davi](https://github.com/oDaviML).
 
