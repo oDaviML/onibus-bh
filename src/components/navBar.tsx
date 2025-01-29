@@ -9,7 +9,7 @@ export default function NavBar() {
 					<div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
 						<div className="flex shrink-0 items-center">
 							<img alt="Onibus" src={onibusImage} className="h-10 w-auto" />
-							<span className="text-white font text-2xl font-bold ml-2">Onibus BH</span>
+							<span className="text-white font text-2xl font-bold ml-2">Ônibus BH</span>
 						</div>
 						<div className="ml-6">
 							<div className="flex space-x-6">
