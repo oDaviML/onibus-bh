@@ -5,6 +5,22 @@
 .leaflet-container {
   height: 500px;
   width: 100%;
+  min-height: 400px;
+  z-index: 1;
+}
+
+.leaflet-tile-container {
+  will-change: transform;
+}
+
+/* Loading state para tiles */
+.leaflet-tile {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.leaflet-tile-loaded {
+  opacity: 1;
 }
 @layer base {
   :root {

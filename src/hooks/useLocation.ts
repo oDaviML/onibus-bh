@@ -38,6 +38,12 @@ const useLocation = (): UseLocationReturn => {
 			return;
 		}
 
+		const options = {
+			enableHighAccuracy: false,
+			timeout: 10000,
+			maximumAge: 300000,
+		};
+
 		navigator.geolocation.getCurrentPosition(
 			(position) => {
 				const { latitude, longitude } = position.coords;
@@ -53,10 +59,11 @@ const useLocation = (): UseLocationReturn => {
 
 				toast({
 					title: "Erro de Geolocalização",
-					description: message,
+					description: `${message}. Usando localização padrão (Centro de BH).`,
 					variant: "destructive",
 				});
 			},
+			options,
 		);
 	}, []);
 

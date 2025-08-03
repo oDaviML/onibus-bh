@@ -15,10 +15,13 @@ export const useOnibus = () => {
 
 export const useOnibusByLinha = (numeroLinha: number, sentido: number) => {
 	const query = useQuery({
-		queryKey: ["listaOnibusLinha", numeroLinha],
+		queryKey: ["listaOnibusLinha", numeroLinha, sentido],
 		queryFn: () => getOnibusByLinha(numeroLinha, sentido),
 		enabled: !!numeroLinha,
 		refetchInterval: 10000,
+		staleTime: 5000,
+		retry: 3,
+		retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
 	});
 
 	return {

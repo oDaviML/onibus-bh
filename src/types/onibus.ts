@@ -4,4 +4,5 @@ export type Onibus = {
 	longitude: number;
 	velocidade: number;
 	sentido: number;
+	horario: string;
 };
