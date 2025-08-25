@@ -27,5 +27,6 @@ export const useOnibusByLinha = (numeroLinha: number, sentido: number) => {
 	return {
 		...query,
 		onibus: query.data?.data,
+		lastUpdated: query.dataUpdatedAt,
 	};
 };

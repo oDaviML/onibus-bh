@@ -1,15 +1,14 @@
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "@/index.css";
 
 import ServerError from "@/components/serverError";
 import Spinner from "@/components/spinner";
-import { useLinhaByNumeroLinha } from "@/hooks/useLinha";
-import useLocation from "@/hooks/useLocation";
-import { useOnibusByLinha } from "@/hooks/useOnibus";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useCoordenadas } from "@/hooks/useCoordenadas";
 import { iconeOnibus } from "@/types/iconeOnibus";
 import { locationIcon } from "@/types/locationIcon";
-import {} from "react";
+import { LocateFixed, ZoomIn } from "lucide-react";
 
 type CoordenadasProps = {
 	numeroLinha: string;
@@ -17,89 +16,131 @@ type CoordenadasProps = {
 };
 
 export default function Coordenadas({ numeroLinha, sentido }: CoordenadasProps) {
-	const numeroLinhaNumber = Number.parseInt(numeroLinha, 10);
-	const sentidoNumber = Number.parseInt(sentido, 10);
+	const {
+		onibus,
+		linha,
+		location,
+		timeAgo,
+		sentidoNumber,
+		isError,
+		isLoading,
+		loading,
+		handleSentidoChange,
+		centerOnUser,
+		fitAllBuses,
+		getBusPopupContent
+	} = useCoordenadas({ numeroLinha, sentido });
 
-	const { onibus, isError, isLoading } = useOnibusByLinha(numeroLinhaNumber, sentidoNumber);
-	const { linha } = useLinhaByNumeroLinha(numeroLinhaNumber);
-	const { location, loading } = useLocation();
+	function InnerMapControls() {
+		const map = useMap();
+
+		return (
+			<div className="leaflet-bottom leaflet-right mb-4 mr-2">
+				<div className="leaflet-control leaflet-bar flex flex-col gap-1 bg-white p-1 rounded-md shadow-lg">
+					<button
+						type="button"
+						onClick={() => centerOnUser(map)}
+						title="Centralizar na sua posição"
+						className="p-2 hover:bg-gray-100 rounded-md"
+					>
+						<LocateFixed className="h-5 w-5 text-gray-700" />
+					</button>
+					<button
+						type="button"
+						onClick={() => fitAllBuses(map)}
+						title="Ver todos os ônibus no mapa"
+						className="p-2 hover:bg-gray-100 rounded-md"
+					>
+						<ZoomIn className="h-5 w-5 text-gray-700" />
+					</button>
+				</div>
+			</div>
+		);
+	}
 
 	return (
-		<div className="p-2 shadow-md rounded-md flex flex-col items-center border-dashed border-2 border-gray-600">
-			<header className="flex flex-col items-center gap-2 my-4">
-				<h1 className="text-xl font-bold text-center">
-					{linha?.data.linha} -{" "}
-					<span className="text-lg font-light">{sentidoNumber === 1 ? "Ida/Unidirecional" : "Volta"}</span>
+		<div className="p-4 flex flex-col gap-4">
+			<header className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
+				<h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
+					{linha?.data.linha} - {linha?.data.nome}
 				</h1>
-				<h3 className="text-sm text-center font-light">Ultima atualizacao: {new Date().toLocaleString()}</h3>
+				<p className="text-lg text-slate-500 dark:text-slate-400 mt-1">
+					Sentido: {sentidoNumber === 1 ? "Ida / Único" : "Volta"}
+				</p>
+				<div className="flex justify-between items-center mt-3 text-sm">
+					<p className="text-slate-600 dark:text-slate-300">
+						<strong>{onibus?.data.length ?? 0}</strong> veículos em operação
+					</p>
+					<div className="text-green-600 dark:text-green-400 font-medium min-w-0 text-right">
+						{isLoading ? "Atualizando..." : `Atualizado ${timeAgo}`}
+					</div>
+				</div>
 			</header>
-			
+
+			{!linha?.data.sentidoIsUnique && (
+				<ToggleGroup
+					type="single"
+					defaultValue={sentido}
+					onValueChange={handleSentidoChange}
+					className="w-full"
+				>
+					<ToggleGroupItem value="1" className="w-full">
+						Ver sentido Ida
+					</ToggleGroupItem>
+					<ToggleGroupItem value="2" className="w-full">
+						Ver sentido Volta
+					</ToggleGroupItem>
+				</ToggleGroup>
+			)}
+
 			{isError && <ServerError />}
-			
-			{/* Mostra spinner apenas quando AMBOS estão carregando */}
+
 			{(isLoading || loading) && <Spinner />}
-			
-			{/* Renderiza o mapa quando pelo menos a localização está pronta, mesmo se os ônibus ainda estão carregando */}
+
 			{!isError && !loading && (
-				<>
-					{isLoading && (
-						<div className="mb-4 text-center text-sm text-gray-600">
-							Carregando informações dos ônibus...
-						</div>
-					)}
-					<MapContainer 
-						center={[location.latitude, location.longitude]} 
+				<div className="rounded-lg overflow-hidden shadow-md">
+					<MapContainer
+						center={[location.latitude, location.longitude]}
 						zoom={16}
-						style={{ height: '500px', width: '100%' }}
-						key={`${location.latitude}-${location.longitude}`} // Force re-render quando localização muda
+						style={{ height: "60vh", width: "100%" }}
+						key={`${location.latitude}-${location.longitude}`}
 					>
 						<TileLayer
 							attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 							url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-							maxZoom={19}
-							minZoom={10}
-							// Configurações para melhor performance
-							updateWhenIdle={false}
-							updateWhenZooming={false}
-							keepBuffer={2}
 						/>
 						<Marker position={[location.latitude, location.longitude]} icon={locationIcon} />
-						{!isLoading && onibus?.data.map((onibus) => {
-							if (onibus.sentido != null || Number(onibus.sentido) !== 3) {
-								return (
-									<Marker
-										key={onibus.numeroVeiculo}
-										position={[onibus.latitude, onibus.longitude]}
-										icon={iconeOnibus}
-									>
-										<Popup className="p-4">
-											<div className="flex flex-col">
-												<h3 className="font-bold text-lg text-gray-800 mb-2">{onibus.numeroVeiculo}</h3>
-												<div className="text-gray-700">
-													<p className="mb-1">
-														<span className="font-medium">Velocidade:</span> {onibus.velocidade} km/h
+						{!isLoading &&
+							onibus?.data.map((bus) => {
+								if (bus.sentido != null || Number(bus.sentido) !== 3) {
+									const busInfo = getBusPopupContent(bus);
+									return (
+										<Marker
+											key={bus.numeroVeiculo}
+											position={[bus.latitude, bus.longitude]}
+											icon={iconeOnibus}
+										>
+											<Popup>
+												<div className="flex flex-col gap-1 text-sm">
+													<h3 className="font-bold text-base text-gray-800">
+														Veículo: {busInfo.numeroVeiculo}
+													</h3>
+													<p>
+														<strong>Velocidade:</strong> {busInfo.velocidade} km/h
 													</p>
 													<p>
-														<span className="font-medium">Sentido:</span>{" "}
-														{Number(onibus.sentido) === 1 ? "Ida/Unidirecional" : "Volta"}
-													</p>
-													<p>
-														{onibus.horario != null && (
-															<>
-																<span className="font-medium">Última atualização:</span>{" "}
-																{onibus.horario.split(' ')[1].split(':').slice(0, 3).join(':')}
-															</>
-														)}
+														<strong>Última atualização:</strong>{" "}
+														{busInfo.horarioFormatado}
 													</p>
 												</div>
-											</div>
-										</Popup>
-									</Marker>
-								);
-							}
-						})}
+											</Popup>
+										</Marker>
+									);
+								}
+							})}
+						<InnerMapControls />
 					</MapContainer>
-				</>
+				</div>
 			)}
 		</div>
 	);
