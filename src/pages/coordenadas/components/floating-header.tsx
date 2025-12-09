@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { ArrowLeft, Clock } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import type { ApiResponse } from "@/types/apiResponse";
 import type { Linha } from "@/types/linha";
@@ -12,7 +12,6 @@ type FloatingHeaderProps = {
 	handleSentidoChange: (value: string) => void;
 	lineColor: string;
 	textColor: string;
-	lastUpdate: string;
 };
 
 export const FloatingHeader = ({
@@ -22,7 +21,6 @@ export const FloatingHeader = ({
 	handleSentidoChange,
 	lineColor,
 	textColor,
-	lastUpdate,
 }: FloatingHeaderProps) => {
 	return (
 		<div className="absolute top-0 left-0 right-0 z-[1000] p-4 pointer-events-none flex flex-col items-center sm:flex-row sm:justify-between sm:items-start gap-4">
@@ -53,10 +51,6 @@ export const FloatingHeader = ({
 							<h2 className="font-bold text-stone-800 dark:text-stone-100 truncate text-sm sm:text-base max-w-[250px] sm:max-w-xs">
 								{linha?.data.nome || "Carregando..."}
 							</h2>
-						</div>
-						<div className="flex items-center gap-2 text-xs font-medium text-stone-500 dark:text-stone-400">
-							<Clock size={12} className="text-sky-500" />
-							<span className="uppercase tracking-wide">Última atualização: {lastUpdate}</span>
 						</div>
 					</div>
 				</motion.div>

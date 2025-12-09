@@ -2,18 +2,18 @@ import ServerError from "@/components/serverError";
 import Spinner from "@/components/spinner";
 import { useCoordenadas } from "@/hooks/useCoordenadas";
 import { getLineColor } from "@/lib/utils";
-import { locationIcon } from "@/types/locationIcon";
 import "leaflet/dist/leaflet.css";
 import { motion } from "framer-motion";
 import { Clock, Gauge } from "lucide-react";
 import { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import "@/index.css";
-import { createBusIcon } from "./components/custom-icons";
+import { createBusIcon, createUserLocationIcon } from "./components/custom-icons";
 import { FloatingHeader } from "./components/floating-header";
 import { MapController } from "./components/map-controller";
 import { StatsLegend } from "./components/stats-legend";
 import { MapControls } from "./components/map-controls";
+import { useTheme } from "@/contexts/ThemeContext";
 
 type CoordenadasProps = {
 	numeroLinha: string;
@@ -38,13 +38,22 @@ export default function Coordenadas({ numeroLinha, sentido }: CoordenadasProps) 
 	const lineColor = color.bg;
 	const textColor = color.text;
 
-	const [lastUpdate, setLastUpdate] = useState<string>("--:--");
+	const { theme } = useTheme();
+	const [tileUrl, setTileUrl] = useState(
+		"https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+	);
 
 	useEffect(() => {
-		if (onibus?.data) {
-			setLastUpdate(new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }));
-		}
-	}, [onibus]);
+		const isDark =
+			theme === "dark" ||
+			(theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+		setTileUrl(
+			isDark
+				? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+				: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+		);
+	}, [theme]);
 
 	if (isError) return <ServerError />;
 
@@ -61,7 +70,6 @@ export default function Coordenadas({ numeroLinha, sentido }: CoordenadasProps) 
 				handleSentidoChange={handleSentidoChange}
 				lineColor={lineColor}
 				textColor={textColor}
-				lastUpdate={lastUpdate}
 			/>
 
 			{/* Map */}
@@ -80,7 +88,7 @@ export default function Coordenadas({ numeroLinha, sentido }: CoordenadasProps) 
 					>
 						<TileLayer
 							attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
-							url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+							url={tileUrl}
 						/>
 						<MapController />
 						<MapControls
@@ -91,7 +99,7 @@ export default function Coordenadas({ numeroLinha, sentido }: CoordenadasProps) 
 						/>
 
 						{/* User Location */}
-						<Marker position={[location.latitude, location.longitude]} icon={locationIcon}>
+						<Marker position={[location.latitude, location.longitude]} icon={createUserLocationIcon()}>
 							<Popup>
 								<div className="font-bold">Você está aqui</div>
 							</Popup>

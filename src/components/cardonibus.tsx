@@ -51,28 +51,31 @@ export default function Cardonibus({ linha, isFavorite, toggleFavorite, onNaviga
 			<DialogContent className="sm:max-w-md bg-stone-50 dark:bg-stone-900 border-stone-200 dark:border-stone-800 p-0 overflow-hidden rounded-3xl gap-0">
 				<DialogTitle className="sr-only">Detalhes da Linha {linha.nome}</DialogTitle>
 				<div className="relative p-6 pb-4">
-					<button
-						onClick={toggleFavorite}
-						className="absolute top-6 right-6 p-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors z-10"
-						type="button"
-					>
-						<Star
-							className={cn(
-								"h-6 w-6 transition-all",
-								isFavorite
-									? "fill-yellow-400 text-yellow-400 scale-110"
-									: "text-stone-400 hover:text-stone-600 dark:hover:text-stone-300",
-							)}
-						/>
-					</button>
 					<div className="flex flex-col gap-3">
-						<div className="flex items-center gap-3">
-							<span
-								className="px-3 py-1 rounded-lg text-lg font-bold shadow-sm"
-								style={{ backgroundColor: color.bg, color: color.text }}
-							>
-								{linha.linha}
-							</span>
+						<div className="flex items-center justify-between gap-3">
+							<div className="flex items-center gap-3">
+								<span
+									className="px-3 py-1 rounded-lg text-lg font-bold shadow-sm"
+									style={{ backgroundColor: color.bg, color: color.text }}
+								>
+									{linha.linha}
+								</span>
+								<button
+									onClick={toggleFavorite}
+									className="p-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+									type="button"
+									title={isFavorite ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+								>
+									<Star
+										className={cn(
+											"h-6 w-6 transition-all",
+											isFavorite
+												? "fill-yellow-400 text-yellow-400 scale-110"
+												: "text-stone-400 hover:text-stone-600 dark:hover:text-stone-300",
+										)}
+									/>
+								</button>
+							</div>
 						</div>
 						<h2 className="text-2xl font-bold text-stone-800 dark:text-stone-100 leading-tight pr-8">
 							{linha.nome}

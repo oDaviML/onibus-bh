@@ -4,6 +4,7 @@ import { Star, StarOff } from "lucide-react";
 import { useState } from "react";
 import Cardonibus from "./cardonibus";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet";
+import { ModeToggle } from "./mode-toggle";
 
 export default function NavBar() {
 	const { linhasFavoritas, toggleFavorito, isFavorita } = useLinhasFavoritas();
@@ -26,6 +27,7 @@ export default function NavBar() {
 			</div>
 
 			<div className="flex items-center gap-2">
+				<ModeToggle />
 				<Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
 					<SheetTrigger asChild>
 						<button 
