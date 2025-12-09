@@ -1,161 +1,149 @@
-import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import "@/index.css";
-
 import ServerError from "@/components/serverError";
 import Spinner from "@/components/spinner";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useCoordenadas } from "@/hooks/useCoordenadas";
-import { iconeOnibus } from "@/types/iconeOnibus";
-import { locationIcon } from "@/types/locationIcon";
-import { LocateFixed, ZoomIn } from "lucide-react";
+import { getLineColor } from "@/lib/utils";
+import "leaflet/dist/leaflet.css";
+import { motion } from "framer-motion";
+import { Clock, Gauge } from "lucide-react";
+import { useEffect, useState } from "react";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import "@/index.css";
+import { createBusIcon, createUserLocationIcon } from "./components/custom-icons";
+import { FloatingHeader } from "./components/floating-header";
+import { MapController } from "./components/map-controller";
+import { StatsLegend } from "./components/stats-legend";
+import { MapControls } from "./components/map-controls";
+import { useTheme } from "@/contexts/ThemeContext";
 
 type CoordenadasProps = {
-  numeroLinha: string;
-  sentido: string;
+	numeroLinha: string;
+	sentido: string;
 };
 
-export default function Coordenadas({
-  numeroLinha,
-  sentido,
-}: CoordenadasProps) {
-  const {
-    onibus,
-    linha,
-    location,
-    timeAgo,
-    sentidoNumber,
-    isError,
-    isLoading,
-    loading,
-    handleSentidoChange,
-    centerOnUser,
-    fitAllBuses,
-    getBusPopupContent,
-  } = useCoordenadas({ numeroLinha, sentido });
+export default function Coordenadas({ numeroLinha, sentido }: CoordenadasProps) {
+	const {
+		onibus,
+		linha,
+		location,
+		isError,
+		isLoading,
+		loading,
+		handleSentidoChange,
+		getBusPopupContent,
+		refetch,
+		numeroLinhaNumber,
+	} = useCoordenadas({ numeroLinha, sentido });
 
-  function InnerMapControls() {
-    const map = useMap();
+	const color = getLineColor(numeroLinhaNumber);
+	const lineColor = color.bg;
+	const textColor = color.text;
 
-    return (
-      <div className="leaflet-bottom leaflet-right mb-4 mr-2">
-        <div className="leaflet-control leaflet-bar flex flex-col gap-1 bg-white p-1 rounded-md shadow-lg">
-          <button
-            type="button"
-            onClick={() => centerOnUser(map)}
-            title="Centralizar na sua posição"
-            className="p-2 hover:bg-gray-100 rounded-md"
-          >
-            <LocateFixed className="h-5 w-5 text-gray-700" />
-          </button>
-          <button
-            type="button"
-            onClick={() => fitAllBuses(map)}
-            title="Ver todos os ônibus no mapa"
-            className="p-2 hover:bg-gray-100 rounded-md"
-          >
-            <ZoomIn className="h-5 w-5 text-gray-700" />
-          </button>
-        </div>
-      </div>
-    );
-  }
+	const { theme } = useTheme();
+	const [tileUrl, setTileUrl] = useState(
+		"https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+	);
 
-  return (
-    <div className="p-4 flex flex-col gap-4">
-      <header className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
-        <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
-          {linha?.data.linha} - {linha?.data.nome}
-        </h1>
-        <p className="text-lg text-slate-500 dark:text-slate-400 mt-1">
-          Sentido:{" "}
-          {linha?.data.sentidoIsUnique
-            ? "Único"
-            : sentidoNumber === 1
-              ? "Ida"
-              : "Volta"}
-        </p>
-        <div className="flex justify-between items-center mt-3 text-sm">
-          <p className="text-slate-600 dark:text-slate-300">
-            <strong>{onibus?.data.length ?? 0}</strong> veículos em operação
-          </p>
-          <div className="text-green-600 dark:text-green-400 font-medium min-w-0 text-right">
-            {isLoading ? "Atualizando..." : `Atualizado ${timeAgo}`}
-          </div>
-        </div>
-      </header>
+	useEffect(() => {
+		const isDark =
+			theme === "dark" ||
+			(theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
 
-      {!linha?.data.sentidoIsUnique && (
-        <ToggleGroup
-          type="single"
-          defaultValue={sentido}
-          onValueChange={handleSentidoChange}
-          className="w-full"
-        >
-          <ToggleGroupItem value="1" className="w-full">
-            Ver sentido Ida
-          </ToggleGroupItem>
-          <ToggleGroupItem value="2" className="w-full">
-            Ver sentido Volta
-          </ToggleGroupItem>
-        </ToggleGroup>
-      )}
+		setTileUrl(
+			isDark
+				? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+				: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+		);
+	}, [theme]);
 
-      {isError && <ServerError />}
+	if (isError) return <ServerError />;
 
-      {(isLoading || loading) && <Spinner />}
+	return (
+		<motion.div
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			className="h-[100dvh] w-full flex flex-col relative bg-stone-50 dark:bg-stone-900 isolate overflow-hidden"
+		>
+			<FloatingHeader
+				linha={linha}
+				numeroLinha={numeroLinha}
+				sentido={sentido}
+				handleSentidoChange={handleSentidoChange}
+				lineColor={lineColor}
+				textColor={textColor}
+			/>
 
-      {!isError && !loading && (
-        <div className="rounded-lg overflow-hidden shadow-md">
-          <MapContainer
-            center={[location.latitude, location.longitude]}
-            zoom={16}
-            style={{ height: "60vh", width: "100%" }}
-            key={`${location.latitude}-${location.longitude}`}
-          >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <Marker
-              position={[location.latitude, location.longitude]}
-              icon={locationIcon}
-            />
-            {!isLoading &&
-              onibus?.data.map((bus) => {
-                if (bus.sentido != null || Number(bus.sentido) !== 3) {
-                  const busInfo = getBusPopupContent(bus);
-                  return (
-                    <Marker
-                      key={bus.numeroVeiculo}
-                      position={[bus.latitude, bus.longitude]}
-                      icon={iconeOnibus}
-                    >
-                      <Popup>
-                        <div className="flex flex-col text-sm">
-                          <h3 className="font-bold text-base text-gray-800">
-                            Veículo: {busInfo.numeroVeiculo}
-                          </h3>
-                          <div className="mt-3 flex flex-col">
-                            <span className="my-0">
-                              <strong>Velocidade:</strong> {busInfo.velocidade}{" "}
-                              km/h
-                            </span>
-                            <span className="my-0">
-                              <strong>Última atualização:</strong>{" "}
-                              {busInfo.horarioFormatado}
-                            </span>
-                          </div>
-                        </div>
-                      </Popup>
-                    </Marker>
-                  );
-                }
-              })}
-            <InnerMapControls />
-          </MapContainer>
-        </div>
-      )}
-    </div>
-  );
+			{/* Map */}
+			<div className="flex-1 w-full relative z-0">
+				{(isLoading || loading) && !onibus?.data ? (
+					<div className="absolute inset-0 flex items-center justify-center bg-stone-50/50 dark:bg-stone-900/50 backdrop-blur-sm z-10">
+						<Spinner />
+					</div>
+				) : (
+					<MapContainer
+						center={[location.latitude, location.longitude]}
+						zoom={13}
+						className="absolute inset-0 h-full w-full z-0 outline-none"
+						zoomControl={false}
+					>
+						<TileLayer
+							attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
+							url={tileUrl}
+						/>
+						<MapController />
+						<MapControls
+							refetch={refetch}
+							isLoading={isLoading}
+							userLocation={location}
+							buses={onibus?.data}
+						/>
+
+						{/* User Location */}
+						<Marker position={[location.latitude, location.longitude]} icon={createUserLocationIcon()}>
+							<Popup>
+								<div className="font-bold">Você está aqui</div>
+							</Popup>
+						</Marker>
+
+						{/* Buses */}
+						{onibus?.data.map((bus) => {
+							if (bus.sentido != null && Number(bus.sentido) !== 3) {
+								const busInfo = getBusPopupContent(bus);
+								return (
+									<Marker
+										key={bus.numeroVeiculo}
+										position={[bus.latitude, bus.longitude]}
+										icon={createBusIcon(lineColor)}
+									>
+										<Popup className="custom-popup" closeButton={false}>
+											<div className="p-1 min-w-[150px] bg-white dark:bg-stone-800 rounded-lg shadow-sm">
+												<div className="flex items-center justify-between mb-2 pb-2 border-b border-stone-100 dark:border-stone-700">
+													<span className="font-bold text-stone-800 dark:text-stone-100">
+														Veículo {busInfo.numeroVeiculo}
+													</span>
+													<div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+												</div>
+												<div className="space-y-1.5">
+													<div className="flex items-center gap-2 text-stone-600 dark:text-stone-400 text-sm">
+														<Gauge size={14} />
+														<span>{busInfo.velocidade} km/h</span>
+													</div>
+													<div className="flex items-center gap-2 text-stone-500 dark:text-stone-500 text-xs">
+														<Clock size={14} />
+														<span>Atualizado: {busInfo.horarioFormatado}</span>
+													</div>
+												</div>
+											</div>
+										</Popup>
+									</Marker>
+								);
+							}
+							return null;
+						})}
+					</MapContainer>
+				)}
+			</div>
+
+			<StatsLegend count={onibus?.data.length ?? 0} />
+		</motion.div>
+	);
 }

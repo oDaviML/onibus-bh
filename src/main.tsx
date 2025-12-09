@@ -5,6 +5,7 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 import ReactDOM from "react-dom/client";
 import { routeTree } from "./routeTree.gen";
 import { LinhasFavoritasProvider } from "./contexts/LinhasFavoritasContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 const router = createRouter({ routeTree });
 
@@ -24,9 +25,11 @@ if (!rootElement.innerHTML) {
 	root.render(
 		<StrictMode>
 			<QueryClientProvider client={queryClient}>
-				<LinhasFavoritasProvider>
-					<RouterProvider router={router} />
-				</LinhasFavoritasProvider>
+				<ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+					<LinhasFavoritasProvider>
+						<RouterProvider router={router} />
+					</LinhasFavoritasProvider>
+				</ThemeProvider>
 			</QueryClientProvider>
 		</StrictMode>,
 	);
