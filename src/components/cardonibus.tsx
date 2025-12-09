@@ -32,8 +32,11 @@ export default function Cardonibus({ linha, isFavorite, toggleFavorite, onNaviga
 				>
 					<div className="flex flex-col items-start gap-4 pl-1 w-full pr-4">
 						<div
-							className="h-12 px-3 rounded-lg flex-shrink-0 flex items-center justify-center text-lg font-bold shadow-sm"
-							style={{ backgroundColor: color.bg, color: color.text }}
+							className={cn(
+								"h-12 px-3 rounded-lg flex-shrink-0 flex items-center justify-center text-lg font-bold shadow-sm",
+								color.bg,
+								color.text,
+							)}
 						>
 							{linha.linha}
 						</div>
@@ -55,8 +58,11 @@ export default function Cardonibus({ linha, isFavorite, toggleFavorite, onNaviga
 						<div className="flex items-center justify-between gap-3">
 							<div className="flex items-center gap-3">
 								<span
-									className="px-3 py-1 rounded-lg text-lg font-bold shadow-sm"
-									style={{ backgroundColor: color.bg, color: color.text }}
+									className={cn(
+										"px-3 py-1 rounded-lg text-lg font-bold shadow-sm",
+										color.bg,
+										color.text,
+									)}
 								>
 									{linha.linha}
 								</span>

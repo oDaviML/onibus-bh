@@ -160,7 +160,7 @@ export default function Home() {
 				<NavBar />
 
 				{/* Search Bar */}
-				<div className="sticky top-6 z-20 mb-10 animate-slide-up" style={{ animationDelay: "0.1s" }}>
+				<div className="sticky top-6 z-20 mb-10 animate-slide-up delay-[100ms]">
 					<div className="relative group">
 						<div className="relative bg-white/80 dark:bg-stone-900/80 backdrop-blur-md rounded-2xl shadow-sm hover:shadow-md flex items-center border border-stone-200 dark:border-stone-700 focus-within:border-sky-400 dark:focus-within:border-sky-600 transition-all">
 							<div className="pl-6 text-stone-400">
@@ -191,7 +191,7 @@ export default function Home() {
 
 				{/* Favorites Section */}
 				{!isSearching && linhasFavoritas.length > 0 && (
-					<div className="mb-10 animate-slide-up" style={{ animationDelay: "0.2s" }}>
+					<div className="mb-10 animate-slide-up delay-[200ms]">
 						<h2 className="text-xl font-bold text-stone-800 dark:text-stone-100 mb-4 flex items-center gap-2">
 							<Star className="text-yellow-400 fill-yellow-400" size={20} />
 							Suas Favoritas
@@ -211,13 +211,13 @@ export default function Home() {
 
 				{/* All Lines Section */}
 				{!isSearching ? (
-					<div className="animate-slide-up" style={{ animationDelay: "0.3s" }}>
+					<div className="animate-slide-up delay-[300ms]">
 						<h2 className="text-xl font-bold text-stone-800 dark:text-stone-100 mb-4">Todas as Linhas</h2>
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-12">{renderLinhas()}</div>
 						{renderPagination()}
 					</div>
 				) : (
-					<div className="animate-slide-up" style={{ animationDelay: "0.2s" }}>
+					<div className="animate-slide-up delay-[200ms]">
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-12">{renderLinhas()}</div>
 						{renderPagination()}
 					</div>

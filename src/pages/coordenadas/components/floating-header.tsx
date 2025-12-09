@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import type { ApiResponse } from "@/types/apiResponse";
 import type { Linha } from "@/types/linha";
+import { cn } from "@/lib/utils";
 
 type FloatingHeaderProps = {
 	linha?: ApiResponse<Linha> | null;
@@ -43,8 +44,11 @@ export const FloatingHeader = ({
 					<div className="flex-1 min-w-0">
 						<div className="flex items-center gap-2 mb-0.5">
 							<span
-								className="px-2 py-0.5 rounded-md text-xs font-bold tracking-wide"
-								style={{ backgroundColor: lineColor, color: textColor }}
+								className={cn(
+									"px-2 py-0.5 rounded-md text-xs font-bold tracking-wide",
+									lineColor,
+									textColor,
+								)}
 							>
 								{linha?.data.linha || numeroLinha}
 							</span>

@@ -82,9 +82,8 @@ export default function Coordenadas({ numeroLinha, sentido }: CoordenadasProps) 
 					<MapContainer
 						center={[location.latitude, location.longitude]}
 						zoom={13}
-						style={{ height: "100%", width: "100%", position: "absolute", top: 0, left: 0 }}
+						className="absolute inset-0 h-full w-full z-0 outline-none"
 						zoomControl={false}
-						className="z-0 outline-none"
 					>
 						<TileLayer
 							attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'

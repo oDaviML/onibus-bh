@@ -7,12 +7,12 @@ export function cn(...inputs: ClassValue[]) {
 
 export const getLineColor = (num: number) => {
 	const colors = [
-		{ bg: "#ef4444", text: "#ffffff" },
-		{ bg: "#3b82f6", text: "#ffffff" },
-		{ bg: "#22c55e", text: "#ffffff" },
-		{ bg: "#f59e0b", text: "#ffffff" },
-		{ bg: "#8b5cf6", text: "#ffffff" },
-		{ bg: "#ec4899", text: "#ffffff" },
+		{ bg: "bg-red-500", text: "text-white" },
+		{ bg: "bg-blue-500", text: "text-white" },
+		{ bg: "bg-green-500", text: "text-white" },
+		{ bg: "bg-amber-500", text: "text-white" },
+		{ bg: "bg-violet-500", text: "text-white" },
+		{ bg: "bg-pink-500", text: "text-white" },
 	];
 	return colors[((num % colors.length) + colors.length) % colors.length];
 };

@@ -5,17 +5,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 export const createBusIcon = (color: string) => {
 	const svgString = renderToStaticMarkup(
 		<div
-			style={{
-				backgroundColor: color,
-				borderRadius: "50%",
-				width: "32px",
-				height: "32px",
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "center",
-				boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
-				border: "2px solid white",
-			}}
+			className={`w-8 h-8 rounded-full flex items-center justify-center border-2 border-white shadow-md ${color}`}
 		>
 			<Bus size={18} color="white" />
 		</div>,
