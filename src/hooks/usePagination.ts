@@ -10,7 +10,6 @@ export function usePagination<T>({ data, itemsPerPage }: UsePaginationProps<T>) 
 
 	const totalPages = Math.ceil(data.length / itemsPerPage);
 
-	// Reset to page 1 if current page exceeds total pages
 	useEffect(() => {
 		if (currentPage > totalPages && totalPages > 0) {
 			setCurrentPage(1);
@@ -31,13 +30,13 @@ export function usePagination<T>({ data, itemsPerPage }: UsePaginationProps<T>) 
 
 	const goToNextPage = () => {
 		if (currentPage < totalPages) {
-			setCurrentPage(prev => prev + 1);
+			setCurrentPage((prev) => prev + 1);
 		}
 	};
 
 	const goToPreviousPage = () => {
 		if (currentPage > 1) {
-			setCurrentPage(prev => prev - 1);
+			setCurrentPage((prev) => prev - 1);
 		}
 	};
 

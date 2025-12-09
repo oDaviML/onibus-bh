@@ -1,27 +1,30 @@
 import Cardonibus from "@/components/cardonibus";
+import NavBar from "@/components/navBar";
 import ServerError from "@/components/serverError";
 import Spinner from "@/components/spinner";
-import { Input } from "@/components/ui/input";
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import {
+	Pagination,
+	PaginationContent,
+	PaginationItem,
+	PaginationLink,
+	PaginationNext,
+	PaginationPrevious,
+} from "@/components/ui/pagination";
 import { useLinha } from "@/hooks/useLinha";
+import { useLinhaSearch } from "@/hooks/useLinhaSearch";
 import { useLinhasFavoritas } from "@/hooks/useLinhasFavoritas";
 import { usePagination } from "@/hooks/usePagination";
-import { useLinhaSearch } from "@/hooks/useLinhaSearch";
-import { Search, StarOff, Star } from "lucide-react";
+import { Bus, Search, Star } from "lucide-react";
+import type React from "react";
 
 export default function Home() {
 	const { linhas, isLoading, isError } = useLinha(true);
 	const { linhasFavoritas, toggleFavorito, isFavorita } = useLinhasFavoritas();
-	const { 
-		searchTerm, 
-		linhasFiltradas, 
-		handleSearchChange, 
-		isSearching 
-	} = useLinhaSearch(linhas?.data);
+	const { searchTerm, linhasFiltradas, handleSearchChange, isSearching } = useLinhaSearch(linhas?.data);
 
 	const linhasParaExibir = isSearching ? linhasFiltradas : linhas?.data || [];
 	const ITEMS_PER_PAGE = 12;
-	
+
 	const {
 		currentPage,
 		totalPages,
@@ -40,17 +43,31 @@ export default function Home() {
 	const handleFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const nomeLinha = event.target.value;
 		handleSearchChange(nomeLinha);
-		resetPagination(); // Reset to first page when filtering
+		resetPagination();
 	};
 
 	const renderLinhas = () => {
-		if (isLoading) return <div className="col-span-full flex justify-center"><Spinner /></div>;
-		if (isError) return <div className="col-span-full"><ServerError /></div>;
+		if (isLoading)
+			return (
+				<div className="col-span-full flex justify-center py-20">
+					<Spinner />
+				</div>
+			);
+		if (isError)
+			return (
+				<div className="col-span-full">
+					<ServerError />
+				</div>
+			);
 
 		if (isSearching && linhasFiltradas.length === 0) {
 			return (
-				<div className="col-span-full text-center py-8">
-					<p className="text-gray-600 text-lg">Nenhuma linha encontrada para "{searchTerm}"</p>
+				<div className="col-span-1 md:col-span-2 text-center py-20">
+					<div className="w-20 h-20 bg-stone-100 dark:bg-stone-800/50 rounded-full flex items-center justify-center mx-auto mb-4 border border-stone-200 dark:border-stone-700">
+						<Bus className="w-8 h-8 text-stone-400" />
+					</div>
+					<h3 className="text-lg font-semibold text-stone-800 dark:text-stone-100 mb-2">Nenhuma linha encontrada</h3>
+					<p className="text-stone-500 dark:text-stone-500 max-w-xs mx-auto">Tente buscar por outro número ou nome.</p>
 				</div>
 			);
 		}
@@ -73,7 +90,7 @@ export default function Home() {
 			const maxVisible = 5;
 			let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
 			const end = Math.min(totalPages, start + maxVisible - 1);
-			
+
 			if (end - start + 1 < maxVisible) {
 				start = Math.max(1, end - maxVisible + 1);
 			}
@@ -85,21 +102,21 @@ export default function Home() {
 		};
 
 		return (
-			<Pagination className="mt-6">
+			<Pagination className="mt-8">
 				<PaginationContent>
 					{hasPreviousPage && (
 						<PaginationItem>
-							<PaginationPrevious 
+							<PaginationPrevious
 								href="#"
 								onClick={(e) => {
 									e.preventDefault();
 									goToPreviousPage();
 								}}
-								className="cursor-pointer"
+								className="cursor-pointer hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-300"
 							/>
 						</PaginationItem>
 					)}
-					
+
 					{getVisiblePages().map((page) => (
 						<PaginationItem key={page}>
 							<PaginationLink
@@ -109,22 +126,26 @@ export default function Home() {
 									e.preventDefault();
 									goToPage(page);
 								}}
-								className="cursor-pointer"
+								className={`cursor-pointer ${
+									currentPage === page
+										? "bg-sky-500 text-white border-sky-500 hover:bg-sky-600 hover:text-white"
+										: "text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800"
+								}`}
 							>
 								{page}
 							</PaginationLink>
 						</PaginationItem>
 					))}
-					
+
 					{hasNextPage && (
 						<PaginationItem>
-							<PaginationNext 
+							<PaginationNext
 								href="#"
 								onClick={(e) => {
 									e.preventDefault();
 									goToNextPage();
 								}}
-								className="cursor-pointer"
+								className="cursor-pointer hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-300"
 							/>
 						</PaginationItem>
 					)}
@@ -134,32 +155,48 @@ export default function Home() {
 	};
 
 	return (
-		<section className="flex flex-col gap-4 items-center">
-			<header className="w-full max-w-lg p-5">
-				<div className="w-full max-w-md mx-auto relative shadow-lg rounded-lg bg-white">
-					<div className="relative">
-						<Input
-							type="text"
-							placeholder="Procurar linha"
-							className="pl-10 pr-4 py-2 w-full rounded-lg"
-							onChange={handleFilter}
-							value={searchTerm}
-						/>
-						<div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-							<Search className="h-4 w-4 text-gray-400" />
+		<div className="min-h-screen transition-colors duration-300">
+			<div className="max-w-4xl mx-auto w-full px-6 py-10">
+				<NavBar />
+
+				{/* Search Bar */}
+				<div className="sticky top-6 z-20 mb-10 animate-slide-up" style={{ animationDelay: "0.1s" }}>
+					<div className="relative group">
+						<div className="relative bg-white/80 dark:bg-stone-900/80 backdrop-blur-md rounded-2xl shadow-sm hover:shadow-md flex items-center border border-stone-200 dark:border-stone-700 focus-within:border-sky-400 dark:focus-within:border-sky-600 transition-all">
+							<div className="pl-6 text-stone-400">
+								<Search className="h-6 w-6" />
+							</div>
+							<input
+								type="text"
+								className="w-full bg-transparent py-5 px-4 text-lg text-stone-800 dark:text-stone-100 placeholder-stone-400 focus:outline-none"
+								placeholder="Qual linha você procura?"
+								value={searchTerm}
+								onChange={handleFilter}
+							/>
+							{searchTerm && (
+								<button
+									type="button"
+									onClick={() => {
+										handleSearchChange("");
+										resetPagination();
+									}}
+									className="pr-6 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 transition-colors"
+								>
+									<span className="text-sm font-semibold">Limpar</span>
+								</button>
+							)}
 						</div>
 					</div>
 				</div>
-			</header>
 
-			{!isSearching &&
-				(linhasFavoritas.length > 0 ? (
-					<div className="container max-w-6xl mx-auto p-6 shadow-lg rounded-lg bg-white dark:bg-gray-800 border-l-4 border-l-blue-700 border border-gray-200 dark:border-gray-700">
-						<h2 className="text-2xl font-bold text-center mb-6 text-blue-900 dark:text-blue-300 flex items-center justify-center gap-2">
-							<Star className="w-6 h-6 text-blue-700 fill-blue-700" />
-							Suas Linhas Favoritas
+				{/* Favorites Section */}
+				{!isSearching && linhasFavoritas.length > 0 && (
+					<div className="mb-10 animate-slide-up" style={{ animationDelay: "0.2s" }}>
+						<h2 className="text-xl font-bold text-stone-800 dark:text-stone-100 mb-4 flex items-center gap-2">
+							<Star className="text-yellow-400 fill-yellow-400" size={20} />
+							Suas Favoritas
 						</h2>
-						<section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							{linhasFavoritas.map((linha) => (
 								<Cardonibus
 									linha={linha}
@@ -168,27 +205,24 @@ export default function Home() {
 									key={linha.numeroLinha}
 								/>
 							))}
-						</section>
+						</div>
+					</div>
+				)}
+
+				{/* All Lines Section */}
+				{!isSearching ? (
+					<div className="animate-slide-up" style={{ animationDelay: "0.3s" }}>
+						<h2 className="text-xl font-bold text-stone-800 dark:text-stone-100 mb-4">Todas as Linhas</h2>
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-12">{renderLinhas()}</div>
+						{renderPagination()}
 					</div>
 				) : (
-					<div className="container max-w-4xl mx-auto p-8 flex flex-col items-center justify-center text-center bg-gray-50 dark:bg-gray-800/50 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg">
-						<StarOff className="w-12 h-12 text-gray-400 dark:text-gray-500 mb-4" />
-						<h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200">
-							Nenhuma linha favorita ainda.
-						</h2>
-						<p className="text-gray-500 dark:text-gray-400 mt-2">
-							Clique na estrela de uma linha para adicioná-la aqui e acessá-la rapidamente.
-						</p>
+					<div className="animate-slide-up" style={{ animationDelay: "0.2s" }}>
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-12">{renderLinhas()}</div>
+						{renderPagination()}
 					</div>
-				))}
-
-			<div className="container max-w-6xl mx-auto p-6 shadow-lg rounded-lg bg-white dark:bg-gray-800 border-l-4 border-l-gray-500 border border-gray-200 dark:border-gray-700">
-				<h2 className="text-2xl font-bold text-center mb-6 text-gray-700 dark:text-gray-300">Todas as Linhas</h2>
-				<section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-					{renderLinhas()}
-				</section>
-				{renderPagination()}
+				)}
 			</div>
-		</section>
+		</div>
 	);
 }

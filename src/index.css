@@ -13,9 +13,8 @@
 }
 
 .leaflet-container {
-  height: 500px;
+  height: 100%;
   width: 100%;
-  min-height: 400px;
   z-index: 1;
 }
 
@@ -32,6 +31,24 @@
 .leaflet-tile-loaded {
   opacity: 1;
 }
+
+/* Custom Popup Styles */
+.custom-popup .leaflet-popup-content-wrapper {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  border: none;
+}
+
+.custom-popup .leaflet-popup-tip {
+  background: white; /* Will be overridden by inline styles in JS if needed, or component logic */
+  box-shadow: 0 4px 15px -1px rgba(0, 0, 0, 0.1);
+}
+
+.dark .custom-popup .leaflet-popup-tip {
+  background: #1c1917;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -95,4 +112,22 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.5s ease-out forwards;
 }

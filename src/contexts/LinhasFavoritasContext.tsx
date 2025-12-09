@@ -20,7 +20,6 @@ export function LinhasFavoritasProvider({ children }: LinhasFavoritasProviderPro
 	const [linhasFavoritas, setLinhasFavoritas] = useState<Linha[]>([]);
 	const [isLoaded, setIsLoaded] = useState(false);
 
-	// Carregar favoritos do localStorage na inicialização
 	useEffect(() => {
 		const favoritosSalvos = localStorage.getItem("linhasFavoritas");
 		if (favoritosSalvos) {
@@ -35,7 +34,6 @@ export function LinhasFavoritasProvider({ children }: LinhasFavoritasProviderPro
 		setIsLoaded(true);
 	}, []);
 
-	// Salvar favoritos no localStorage sempre que o estado mudar
 	useEffect(() => {
 		if (isLoaded) {
 			localStorage.setItem("linhasFavoritas", JSON.stringify(linhasFavoritas));
@@ -43,13 +41,13 @@ export function LinhasFavoritasProvider({ children }: LinhasFavoritasProviderPro
 	}, [linhasFavoritas, isLoaded]);
 
 	const toggleFavorito = (linha: Linha) => {
-		setLinhasFavoritas(prev => {
+		setLinhasFavoritas((prev) => {
 			const jaFavorita = prev.some((fav) => fav.numeroLinha === linha.numeroLinha);
-			
+
 			if (jaFavorita) {
 				return prev.filter((fav) => fav.numeroLinha !== linha.numeroLinha);
 			}
-			
+
 			return [...prev, linha];
 		});
 	};
@@ -65,9 +63,5 @@ export function LinhasFavoritasProvider({ children }: LinhasFavoritasProviderPro
 		isLoaded,
 	};
 
-	return (
-		<LinhasFavoritasContext.Provider value={value}>
-			{children}
-		</LinhasFavoritasContext.Provider>
-	);
+	return <LinhasFavoritasContext.Provider value={value}>{children}</LinhasFavoritasContext.Provider>;
 }

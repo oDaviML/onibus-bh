@@ -28,37 +28,34 @@ function formatTimeAgo(timestamp: number) {
 
 function formatBusTime(horario: string) {
 	if (!horario) return "N/A";
-	
+
 	try {
-		// Format: "25-08-2025 08:33:05:000"
-		// Convert to ISO format: "2025-08-25T08:33:05.000Z"
-		const [datePart, timePart] = horario.split(' ');
-		const [day, month, year] = datePart.split('-');
-		const timeWithMs = timePart.replace(/:/g, ':').split(':');
+		const [datePart, timePart] = horario.split(" ");
+		const [day, month, year] = datePart.split("-");
+		const timeWithMs = timePart.replace(/:/g, ":").split(":");
 		const [hours, minutes, seconds, milliseconds] = timeWithMs;
-		
-		const isoString = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds || '000'}`;
+
+		const isoString = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds || "000"}`;
 		const busTime = new Date(isoString);
-		
+
 		if (Number.isNaN(busTime.getTime())) {
 			return "N/A";
 		}
-		
-		// Calculate time difference
+
 		const now = new Date();
 		const diffMs = now.getTime() - busTime.getTime();
 		const diffSeconds = Math.floor(diffMs / 1000);
 		const diffMinutes = Math.floor(diffSeconds / 60);
 		const diffHours = Math.floor(diffMinutes / 60);
-		
+
 		if (diffSeconds < 5) return "agora";
 		if (diffSeconds < 60) return `há ${diffSeconds} segundos`;
 		if (diffMinutes < 60) return `há ${diffMinutes} minutos`;
 		if (diffHours < 24) return `há ${diffHours} horas`;
-		
-		return busTime.toLocaleTimeString('pt-BR');
+
+		return busTime.toLocaleTimeString("pt-BR");
 	} catch (error) {
-		console.error('Error parsing bus time:', error);
+		console.error("Error parsing bus time:", error);
 		return "N/A";
 	}
 }
@@ -67,7 +64,7 @@ export function useCoordenadas({ numeroLinha, sentido }: UseCoordendasProps) {
 	const numeroLinhaNumber = Number.parseInt(numeroLinha, 10);
 	const sentidoNumber = Number.parseInt(sentido, 10);
 
-	const { onibus, isError, isLoading, lastUpdated } = useOnibusByLinha(numeroLinhaNumber, sentidoNumber);
+	const { onibus, isError, isLoading, lastUpdated, refetch } = useOnibusByLinha(numeroLinhaNumber, sentidoNumber);
 	const { linha } = useLinhaByNumeroLinha(numeroLinhaNumber);
 	const { location, loading } = useLocation();
 	const [timeAgo, setTimeAgo] = useState("");
@@ -78,7 +75,7 @@ export function useCoordenadas({ numeroLinha, sentido }: UseCoordendasProps) {
 			setTimeAgo(formatTimeAgo(lastUpdated));
 			const interval = setInterval(() => {
 				setTimeAgo(formatTimeAgo(lastUpdated));
-			}, 5000); // Update every 5 seconds
+			}, 5000);
 			return () => clearInterval(interval);
 		}
 	}, [lastUpdated]);
@@ -100,13 +97,13 @@ export function useCoordenadas({ numeroLinha, sentido }: UseCoordendasProps) {
 				const bounds = onibus.data.map((bus) => [bus.latitude, bus.longitude]) as LatLngBoundsExpression;
 				map.fitBounds(bounds, { padding: [50, 50] });
 			}
-		}
+		},
 	});
 
 	const getBusPopupContent = (bus: { numeroVeiculo: number; velocidade: number; horario: string }) => ({
 		numeroVeiculo: bus.numeroVeiculo.toString(),
 		velocidade: bus.velocidade,
-		horarioFormatado: formatBusTime(bus.horario)
+		horarioFormatado: formatBusTime(bus.horario),
 	});
 
 	const mapActions = createMapActions();
@@ -119,20 +116,21 @@ export function useCoordenadas({ numeroLinha, sentido }: UseCoordendasProps) {
 		timeAgo,
 		numeroLinhaNumber,
 		sentidoNumber,
-		
+
 		// States
 		isError,
 		isLoading,
 		loading,
-		
+
 		// Actions
 		handleSentidoChange,
+		refetch,
 		...mapActions,
 		getBusPopupContent,
-		
+
 		// Utils
 		formatBusTime,
 		sentido,
-		numeroLinha
+		numeroLinha,
 	};
 }

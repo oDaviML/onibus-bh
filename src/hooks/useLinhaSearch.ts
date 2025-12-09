@@ -6,9 +6,10 @@ export function useLinhaSearch(linhas: Linha[] | undefined) {
 
 	const linhasFiltradas = useMemo(() => {
 		if (!searchTerm || !linhas) return linhas || [];
-		return linhas.filter((linha) => 
-			linha.linha.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			linha.nome.toLowerCase().includes(searchTerm.toLowerCase())
+		return linhas.filter(
+			(linha) =>
+				linha.linha.toLowerCase().includes(searchTerm.toLowerCase()) ||
+				linha.nome.toLowerCase().includes(searchTerm.toLowerCase()),
 		);
 	}, [linhas, searchTerm]);
 
