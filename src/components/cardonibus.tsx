@@ -28,18 +28,18 @@ export default function Cardonibus({ linha, isFavorite, toggleFavorite, onNaviga
 					whileTap={{ scale: 0.98 }}
 					transition={{ type: "spring", stiffness: 400, damping: 17 }}
 					type="button"
-					className="group relative w-full bg-white/60 dark:bg-stone-900/60 backdrop-blur-sm rounded-xl p-5 border border-stone-200 dark:border-stone-800 hover:border-sky-200 dark:hover:border-sky-800 hover:bg-white dark:hover:bg-stone-900 shadow-sm hover:shadow-md transition-colors flex items-center justify-between text-left overflow-hidden"
+					className="group relative w-full bg-white/60 dark:bg-stone-900/60 backdrop-blur-sm rounded-xl p-5 border border-stone-200 dark:border-stone-800 hover:border-sky-200 dark:hover:border-sky-800 hover:bg-white dark:hover:bg-stone-900 shadow-sm hover:shadow-md transition-colors flex flex-col items-start justify-between text-left overflow-hidden h-full"
 				>
-					<div className="flex items-center gap-5 pl-1 w-full pr-8">
+					<div className="flex flex-col items-start gap-4 pl-1 w-full pr-4">
 						<div
-							className="h-14 min-w-[3.5rem] px-2 rounded-lg flex-shrink-0 flex items-center justify-center text-lg font-bold shadow-sm"
+							className="h-12 px-3 rounded-lg flex-shrink-0 flex items-center justify-center text-lg font-bold shadow-sm"
 							style={{ backgroundColor: color.bg, color: color.text }}
 						>
 							{linha.linha}
 						</div>
 
-						<div className="min-w-0 flex-1">
-							<h3 className="font-semibold text-stone-800 dark:text-stone-100 text-lg leading-tight mb-1 truncate group-hover:text-sky-700 dark:group-hover:text-sky-400 transition-colors">
+						<div className="w-full">
+							<h3 className="font-semibold text-stone-800 dark:text-stone-100 text-lg leading-tight line-clamp-2 group-hover:text-sky-700 dark:group-hover:text-sky-400 transition-colors">
 								{linha.nome}
 							</h3>
 						</div>
