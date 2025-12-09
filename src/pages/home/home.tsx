@@ -1,3 +1,5 @@
+import { Bus, Search, Star } from "lucide-react";
+import type React from "react";
 import Cardonibus from "@/components/cardonibus";
 import NavBar from "@/components/navBar";
 import ServerError from "@/components/serverError";
@@ -14,8 +16,6 @@ import { useLinha } from "@/hooks/useLinha";
 import { useLinhaSearch } from "@/hooks/useLinhaSearch";
 import { useLinhasFavoritas } from "@/hooks/useLinhasFavoritas";
 import { usePagination } from "@/hooks/usePagination";
-import { Bus, Search, Star } from "lucide-react";
-import type React from "react";
 
 export default function Home() {
 	const { linhas, isLoading, isError } = useLinha(true);
