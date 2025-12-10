@@ -1,19 +1,24 @@
+import { Link } from "@tanstack/react-router";
+import { MapPinOff } from "lucide-react";
+
 export default function NotFound() {
 	return (
-		<div className="bg-white dark:bg-gray-900 col-span-2">
-			<div className="py-4 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
-				<div className="mx-auto max-w-screen-sm text-center">
-					<h1 className="mb-4 text-7xl tracking-tight font-extrabold lg:text-9xl text-primary-600 dark:text-primary-500">
-						404
-					</h1>
-					<p className="mb-4 text-3xl tracking-tight font-bold text-gray-900 md:text-4xl dark:text-white">
-						Pagina nao encontrada
-					</p>
-					<p className="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">
-						Verifique a URL ou tente novamente.
-					</p>
-				</div>
+		<div className="min-h-[80vh] w-full flex flex-col items-center justify-center p-6 animate-fade-in bg-stone-50 dark:bg-stone-950">
+			<div className="w-24 h-24 bg-stone-100 dark:bg-stone-900 rounded-3xl flex items-center justify-center mb-6 shadow-sm border border-stone-200 dark:border-stone-800">
+				<MapPinOff className="w-10 h-10 text-stone-400 dark:text-stone-500" />
 			</div>
+			<h1 className="text-3xl font-bold text-stone-800 dark:text-stone-100 mb-3 text-center tracking-tight">
+				Página não encontrada
+			</h1>
+			<p className="text-stone-500 dark:text-stone-400 text-center max-w-md mb-8 text-lg">
+				A rota que você tentou acessar não existe ou foi movida. Verifique o endereço e tente novamente.
+			</p>
+			<Link
+				to="/"
+				className="px-8 py-3 bg-sky-500 hover:bg-sky-600 text-white font-semibold rounded-2xl transition-all shadow-lg shadow-sky-500/20 hover:shadow-sky-500/30 active:scale-95"
+			>
+				Voltar para o início
+			</Link>
 		</div>
 	);
 }
