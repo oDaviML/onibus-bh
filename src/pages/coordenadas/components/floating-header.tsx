@@ -65,7 +65,7 @@ export const FloatingHeader = ({
 						initial={{ y: -20, opacity: 0 }}
 						animate={{ y: 0, opacity: 1 }}
 						transition={{ delay: 0.2 }}
-						className="bg-white/95 dark:bg-stone-900/95 backdrop-blur-md shadow-lg rounded-2xl p-1.5 pointer-events-auto border border-stone-200 dark:border-stone-800 w-full sm:w-auto flex justify-center"
+						className="bg-white/80 dark:bg-stone-900/80 backdrop-blur-md shadow-lg rounded-2xl p-1.5 pointer-events-auto border border-stone-200 dark:border-stone-800 w-full sm:w-auto flex justify-center"
 					>
 						<ToggleGroup type="single" value={sentido} onValueChange={handleSentidoChange} className="gap-1 w-full">
 							<ToggleGroupItem
